@@ -21,7 +21,7 @@ nav div > h4 {
 }
 
 .invisible {
-  display: none;
+  display: none !important;
 }
 
 div.lista .card:hover {

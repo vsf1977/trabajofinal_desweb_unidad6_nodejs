@@ -1,22 +1,21 @@
 
-const express = require ('express')
-const morgan = require ('morgan')
-const app = express()
-const path = require ('path')
+var express = require('express')
+var bodyparser = require('body-parser')
+var app = express()
+var http = require('http')
+var path = require('path')
+var router = require(path.join(__dirname , '/routing'))
+var server = http.createServer(app)
 
+app.use(bodyparser.json())
+app.use(bodyparser.urlencoded({extended: true})) 
+app.use(express.static(path.join(__dirname , '/public')))
 
-const ciudades = require(path.join(__dirname , '/public/data.json'))
+app.use('/',router)
 
 app.set('port',process.env.PORT || 3000)
 
-app.get('/info', (req,res) =>
-{
-    res.json(ciudades)
-})
-
-app.use(express.static(path.join(__dirname , '/public')))
-
-app.listen(app.get('port'), () =>
+server.listen(app.get('port'), () =>
 {
     console.log('server in port 3000 ')
 })

@@ -1,7 +1,3 @@
-//Inicializador del elemento Slider
-
-var lista_ciudades = []
-var tipo = []
 
 $("#rangoPrecio").ionRangeSlider({
   type: "double",
@@ -27,62 +23,49 @@ function setSearch() {
 setSearch()
 
 $(document).ready(function() 
-{     
-  get_info()  
-  llenarinfo()  
+{ 
+  get_info_selects()
+
+  $("#buscar").click(function()
+  {    
+    if ($('#personalizada').hasClass('invisible'))
+    {      
+      if ($('#tarjeta').hasClass('invisible'))
+      {
+        $("#tarjeta").removeClass('invisible')
+      }
+      else
+      {
+        $("#tarjeta").addClass('invisible')
+      }
+    }
+  })
+
 });
 
 
-function get_info()
-{
+function get_info_selects()
+{ 
   $.ajax({
-    url:'/info',
-    success: function (info)      
+    url:'/info',    
+    success: function (datos)      
     {     
-      console.log(info)
-      var x = false 
-      var y = false
-      for(i=0;i<info.length;i++)
-      {          
-          x = false
-          y = false
-          for(j=0;j<lista_ciudades.length;j++)
-          {
-            if (lista_ciudades[j] == info[i].Ciudad)
-            {
-              x = true
-            }
-            if (tipo[j] == info[i].Tipo)
-            {
-              y = true
-            }
-          }          
-          if (!y)
-          {            
-            tipo[tipo.length] = info[i].Tipo          
-          }
-          if (!x)
-          {            
-            lista_ciudades[lista_ciudades.length] = info[i].Ciudad          
-          }
-      }
-      llenarinfo()
-      $('select').material_select()
+      llenar_select((datos))
+      $('select').material_select()    
     }
   })
 }
 
 
-function llenarinfo()
-{  
-  for(j=0;j<lista_ciudades.length;j++)
-  {
-    console.log(lista_ciudades[j])
-    $("#ciudad").append("<option value='"+lista_ciudades[j]+"'>"+lista_ciudades[j]+"</option>")     
+function llenar_select(datos)
+{ 
+  var info = JSON.parse(datos)
+  for(j=0;j<info.Ciudades.length;j++)
+  {    
+    $("#ciudad").append("<option value='"+info.Ciudades[j].nombre+"'>"+info.Ciudades[j].nombre+"</option>")     
   }
-  for(j=0;j<tipo.length;j++)
-  {
-    console.log(tipo[j])
-    $("#tipo").append("<option value='"+tipo[j]+"'>"+tipo[j]+"</option>")     
+  for(j=0;j<info.Tipos.length;j++)
+  {   
+    $("#tipo").append("<option value='"+info.Tipos[j].nombre+"'>"+info.Tipos[j].nombre+"</option>")     
   }          
 }
