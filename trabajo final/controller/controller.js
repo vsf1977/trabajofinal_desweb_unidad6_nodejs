@@ -67,9 +67,7 @@ controller.consulta = (req , res) =>
     var max = req.param("max")
     var precio = 0
     var conteo = 0
-    var consulta = {} 
-    var key = 'Resultados'
-    consulta[key] = []  
+    var consulta = []   
 
     if ((ciudad + tipo + min + max) == "00")
     {
@@ -100,7 +98,7 @@ controller.consulta = (req , res) =>
 
             if (conteo == 3)
             {
-                consulta[key].push(archivo[i])
+                consulta.push(archivo[i])
             }
         }
         res.json(consulta)
