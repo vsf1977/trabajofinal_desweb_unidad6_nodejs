@@ -1,6 +1,5 @@
 var path = require('path')
 var archivo = require(path.join(__dirname , '../public/data.json'))
-
 const controller = {}
 
 var lista_ciudades = []
@@ -14,8 +13,7 @@ controller.list = (req , res) =>
     var key = 'Ciudades'
     listado[key] = []    
     var key2 = 'Tipos'
-    listado[key2] = []    
-
+    listado[key2] = []  
 
     for(i=0;i<archivo.length;i++)
     {          
@@ -59,6 +57,54 @@ controller.list = (req , res) =>
       
     }
     res.json(JSON.stringify(listado))
+}
+
+controller.consulta = (req , res) =>
+{
+    var ciudad = req.param("ciudad")
+    var tipo = req.param("tipo")
+    var min = req.param("min")
+    var max = req.param("max")
+    var precio = 0
+    var conteo = 0
+    var consulta = {} 
+    var key = 'Resultados'
+    consulta[key] = []  
+
+    if ((ciudad + tipo + min + max) == "00")
+    {
+        res.json(archivo)
+    }
+    else
+    {
+        for(i=0;i<archivo.length;i++)
+        {      
+            conteo = 0       
+            if (ciudad == "" || ciudad == archivo[i].Ciudad)
+            {
+                conteo = conteo + 1
+            }
+
+            if (tipo == "" || tipo == archivo[i].Tipo)
+            {
+                conteo = conteo + 1
+            }
+            
+            precio = archivo[i].Precio.replace(/[$,]+/g,"")
+            precio = parseInt(precio)
+
+            if (precio >= min && precio <= max)
+            {
+                conteo = conteo + 1
+            }
+
+            if (conteo == 3)
+            {
+                consulta[key].push(archivo[i])
+            }
+        }
+        res.json(consulta)
+    }
 }
 
 module.exports = controller

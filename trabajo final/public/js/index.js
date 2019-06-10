@@ -24,23 +24,24 @@ setSearch()
 
 $(document).ready(function() 
 { 
+  var slider = $("#rangoPrecio").data("ionRangeSlider");
   get_info_selects()
 
   $("#buscar").click(function()
   {    
-    if ($('#personalizada').hasClass('invisible'))
-    {      
-      if ($('#tarjeta').hasClass('invisible'))
-      {
-        $("#tarjeta").removeClass('invisible')
-      }
-      else
-      {
-        $("#tarjeta").addClass('invisible')
-      }
+    var ciudad = ""
+    var tipo = ""
+    var min = 0
+    var max = 0
+    if (!($('#personalizada').hasClass('invisible')))
+    { 
+      ciudad = $("#ciudad").val()
+      tipo = $("#tipo").val()
+      min = slider.result.from
+      max = slider.result.to
     }
+    get_info_cards(ciudad,tipo,min,max)
   })
-
 });
 
 
@@ -68,4 +69,21 @@ function llenar_select(datos)
   {   
     $("#tipo").append("<option value='"+info.Tipos[j].nombre+"'>"+info.Tipos[j].nombre+"</option>")     
   }          
+}
+
+function get_info_cards(ciudad,tipo,min,max)
+{ 
+  var ciudad1 = ciudad
+  var tipo1 = tipo
+  var min1 = min
+  var max1 = max  
+  $.ajax({
+    url:'/consulta',
+    type: 'GET',
+    data : {'ciudad':ciudad1,'tipo':tipo1,'min':min1,'max':max1},     
+    success: function (datos)      
+    {        
+      console.log(datos)    
+    }
+  })
 }

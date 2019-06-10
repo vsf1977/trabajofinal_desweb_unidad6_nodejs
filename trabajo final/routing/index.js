@@ -6,4 +6,6 @@ var controller = require(path.join(__dirname , '../controller/controller.js'))
 
 Router.get('/info', controller.list)
 
+Router.get('/consulta', controller.consulta)
+
 module.exports = Router
